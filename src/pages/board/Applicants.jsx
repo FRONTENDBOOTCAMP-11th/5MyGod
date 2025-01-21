@@ -57,7 +57,8 @@ const Applicants = () => {
     fetchApplicants();
   }, []);
 
-  const handleAcceptApplicant = async (productId, applicantId) => {
+  const handleAcceptApplicant = async (e, productId, applicantId) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
     try {
       const productResponse = await axiosInstance.get(
         `/seller/products/${_id}`
@@ -76,7 +77,6 @@ const Applicants = () => {
 
       if (response.data.ok === 1) {
         console.log("지원자 수락 성공:", response.data);
-        // MyPage의 나의 요청 탭으로 이동
         navigate("/users/mypage?tab=requests");
       } else {
         console.error("지원자 수락 실패:", response.data);
@@ -120,13 +120,15 @@ const Applicants = () => {
                   : ""
               }`}
             >
-              <div className="flex items-center ml-[16px] flex-grow">
+              <div
+                className="flex items-center ml-[16px] flex-grow cursor-pointer"
+                onClick={() => navigate(`/users/${applicant.id}`)}
+              >
                 <img
                   src={`https://11.fesp.shop${applicant.profileImage}`}
                   alt={`${applicant.name}의 프로필`}
                   onError={handleImageError}
-                  className="w-[42px] h-[42px] rounded-full object-cover mr-[16px] cursor-pointer"
-                  onClick={() => navigate(`/users/${applicant.id}`)}
+                  className="w-[42px] h-[42px] rounded-full object-cover mr-[16px]"
                 />
 
                 <div className="flex flex-col justify-center">
@@ -144,8 +146,8 @@ const Applicants = () => {
                     ? "bg-gray-400 cursor-not-allowed"
                     : "bg-[#4849E8] cursor-pointer"
                 } text-white shadow-card-shadow`}
-                onClick={() =>
-                  handleAcceptApplicant(applicant.productId, applicant.id)
+                onClick={(e) =>
+                  handleAcceptApplicant(e, applicant.productId, applicant.id)
                 }
                 disabled={isMatchedExists || applicant.productState === "PS020"}
               >
