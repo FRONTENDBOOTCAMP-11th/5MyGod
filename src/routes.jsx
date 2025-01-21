@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { lazy } from "react";
+import Protected from "./protected";
 
 const Layout = lazy(() => import("@components/layout"));
 const MainPage = lazy(() => import("@pages/board/MainPage"));
@@ -22,16 +23,23 @@ const router = createBrowserRouter(
       // errorElement: <ErrorPage />,
       children: [
         { index: true, element: <MainPage /> },
-        { path: "errand/:_id", element: <Detail /> },
-        { path: "errand/applicants/:_id", element: <Applicants /> },
-        { path: "errand/new", element: <New /> },
         { path: "users/signup", element: <Signup /> },
         { path: "users/login", element: <Login /> },
-        { path: "users/mypage", element: <MyPage /> },
-        { path: "users/myApplies", element: <MyApplies /> },
-        { path: "users/ongoingErrands", element: <OngoingErrands /> },
-        { path: "users/:_id", element: <UserPage /> },
-        { path: "pay/paysuccess", element: <PaySuccess /> },
+        { path: "errand/:_id", element: <Detail /> },
+
+        //로그인 필요한 페이지
+        {
+          element: <Protected />,
+          children: [
+            { path: "errand/applicants/:_id", element: <Applicants /> },
+            { path: "errand/new", element: <New /> },
+            { path: "users/mypage", element: <MyPage /> },
+            { path: "users/myApplies", element: <MyApplies /> },
+            { path: "users/ongoingErrands", element: <OngoingErrands /> },
+            { path: "users/:_id", element: <UserPage /> },
+            { path: "pay/paysuccess", element: <PaySuccess /> },
+          ],
+        },
       ],
     },
   ],

@@ -1,48 +1,58 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import useAxiosInstance from "@hooks/useAxiosInstance";
 import useUserStore from "@zustand/userStore";
 import ListItem from "@pages/board/ListItem";
 
 const OngoingErrands = () => {
-  const axiosInstance = useAxiosInstance(); // 공통 Axios 인스턴스 사용
-  const { user } = useUserStore(); // Zustand에서 사용자 정보 가져오기
+  const navigate = useNavigate();
+  const axiosInstance = useAxiosInstance();
+  const { user } = useUserStore();
   const [errandItems, setErrandItems] = useState([]);
-  const [activeTab, setActiveTab] = useState("부탁한 심부름");
+  const [activeTab, setActiveTab] = useState(() => {
+    // 초기 상태를 sessionStorage에서 가져오거나 기본값 설정
+    return sessionStorage.getItem("activeTab") || "부탁한 심부름";
+  });
   const [loading, setLoading] = useState(false);
+
+  // activeTab이 변경될 때마다 sessionStorage에 저장
+  useEffect(() => {
+    sessionStorage.setItem("activeTab", activeTab);
+  }, [activeTab]);
 
   // API 호출 함수
   const fetchErrands = async (endpoint) => {
     try {
       setLoading(true);
+      const response = await axiosInstance.get(endpoint);
 
-      // API 호출
-      const response = await axiosInstance.get(endpoint, {
-        params:
-          activeTab === "지원한 심부름" ? { userId: user?._id } : undefined,
-      });
-
-      // 데이터 구조에 따라 처리
-      if (activeTab === "지원한 심부름") {
-        // "OS020" 상태 및 "PS020" 상태 필터링
-        const filteredItems =
-          response.data?.item
-            .filter(
-              (order) =>
-                order.state === "OS020" &&
-                order.products[0]?.extra?.productState[0] === "PS020"
-            )
-            .map((order) => order.products[0]) || [];
-        setErrandItems(filteredItems);
-      } else {
-        // item.seller_id와 user._id가 일치하는 데이터 필터링
-        const filteredItems =
-          response.data?.item.filter(
-            (product) => product.seller_id === user?._id
-          ) || [];
-        setErrandItems(filteredItems);
+      if (response.data.ok === 1) {
+        if (activeTab === "지원한 심부름") {
+          const filteredItems =
+            response.data.item
+              .filter(
+                (order) =>
+                  order.state === "OS020" &&
+                  order.products[0]?.extra?.productState[0] === "PS020"
+              )
+              .map((order) => order.products[0]) || [];
+          setErrandItems(filteredItems);
+        } else {
+          const filteredItems =
+            response.data.item.filter(
+              (product) =>
+                product.seller_id === user?._id &&
+                product.extra?.productState[0] === "PS020"
+            ) || [];
+          setErrandItems(filteredItems);
+        }
       }
     } catch (error) {
       console.error(`${activeTab} API 호출 오류:`, error);
+      if (error.response) {
+        console.error("응답 데이터:", error.response.data);
+        console.error("응답 상태:", error.response.status);
+      }
     } finally {
       setLoading(false);
     }
@@ -50,22 +60,18 @@ const OngoingErrands = () => {
 
   // 탭 변경 및 초기 데이터 로드
   useEffect(() => {
-    if (!user) {
-      console.warn("사용자 정보가 없습니다.");
-      return;
-    }
+    if (!user) return;
 
-    // API 엔드포인트 결정
     const endpoint =
       activeTab === "지원한 심부름" ? "/orders" : "/seller/products";
-
-    // API 호출
     fetchErrands(endpoint);
-  }, [activeTab]); // activeTab 또는 user 변경 시 호출
+  }, [activeTab, user]);
+
+  // 로그인하지 않은 경우 렌더링하지 않음
+  if (!user) return null;
 
   return (
     <main className="bg-background-color flex-grow p-[16px] flex flex-col gap-[16px] overflow-auto">
-      {/* 탭 네비게이션 */}
       <div className="px-4 py-2">
         <nav className="max-w-full bg-gray-100 border border-gray-200 rounded-lg p-2">
           <div className="flex justify-between items-center gap-2">
@@ -93,10 +99,8 @@ const OngoingErrands = () => {
         </nav>
       </div>
 
-      {/* 로딩 표시 */}
       {loading && <div className="text-center text-gray-500">로딩 중...</div>}
 
-      {/* 데이터 렌더링 */}
       {!loading && errandItems.length > 0 && (
         <ul className="list flex flex-col items-center gap-[24px]">
           {errandItems.map((item, index) => (
@@ -105,9 +109,8 @@ const OngoingErrands = () => {
         </ul>
       )}
 
-      {/* 데이터가 없을 때 */}
       {!loading && errandItems.length === 0 && (
-        <div className="text-gray-500">게시글이 없습니다.</div>
+        <div className="text-gray-500">진행 중인 심부름이 없습니다.</div>
       )}
     </main>
   );

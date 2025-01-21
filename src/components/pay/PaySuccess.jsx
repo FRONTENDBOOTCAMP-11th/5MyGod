@@ -8,12 +8,7 @@ export default function PaySuccess() {
   const navigate = useNavigate();
 
   const handleMoveToMyRequests = () => {
-    // /users/mypage로 이동하면서 state로 activeTab 정보를 전달
-    navigate("/users/mypage", {
-      state: {
-        activeTab: "requests",
-      },
-    });
+    navigate("/users/mypage?tab=requests");
   };
 
   // const prodData = location.state; // 결제 완료한 상품 데이터

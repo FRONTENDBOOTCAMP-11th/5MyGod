@@ -1,11 +1,12 @@
 import { Link, useNavigate } from "react-router-dom";
+import useUserStore from "@zustand/userStore";
 
 export default function HeaderButton() {
-  const isLogin = sessionStorage.getItem("user");
+  const isLoggedOut = useUserStore((state) => state.user === null);
   const navigate = useNavigate();
 
   const handleClick = () => {
-    if (!isLogin) navigate("/users/login");
+    if (isLoggedOut) navigate("/users/login");
   };
 
   // 로그인 페이지에서는 버튼을 숨김
@@ -18,7 +19,7 @@ export default function HeaderButton() {
 
   return (
     <div className="flex items-center">
-      {isLogin ? (
+      {!isLoggedOut ? (
         <img
           src="/assets/alarm.png"
           className="size-10 cursor-pointer"

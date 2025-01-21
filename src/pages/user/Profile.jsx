@@ -1,6 +1,10 @@
 export default function Profile({ image, nickname, earnings, hearts, isMyPage }) {
-  console.log(image); //
-  const img = image.trim() ? `https://11.fesp.shop${image}` : "https://via.placeholder.com/100";
+  console.log(image);
+
+  const img =
+    image && typeof image === "string" && image.trim()
+      ? `https://11.fesp.shop${image}`
+      : "https://via.placeholder.com/100";
 
   return (
     <section className="flex items-center mt-6 px-4 font-laundry">

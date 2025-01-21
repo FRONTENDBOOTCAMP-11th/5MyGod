@@ -53,7 +53,6 @@ export default function MainPage() {
 
   // 현재 시각
   const now = new Date();
-  console.log("페이지 로드 시각: ", now);
 
   // 심부름 목록 필터링
   // const filteredItems = data.item.filter((item) => {
@@ -65,7 +64,6 @@ export default function MainPage() {
 
   // 심부름 배열을 순회하며 <ListItem> 생성
   const list = data.item.map((item) => <ListItem key={item._id} item={item} />);
-  console.log("필터링된 심부름으로 생성한 리스트아이템 목록: ", list);
 
   const handleRequestClick = () => {
     navigate(`/errand/new`); // 작성페이지로 이동

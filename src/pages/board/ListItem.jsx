@@ -11,7 +11,7 @@ ListItem.propTypes = {
     user: PropTypes.shape({
       name: PropTypes.string.isRequired,
     }),
-    createdAt: PropTypes.string.isRequired,
+
     extra: PropTypes.shape({
       category: PropTypes.array.isRequired,
       tags: PropTypes.array.isRequired,

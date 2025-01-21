@@ -76,7 +76,8 @@ const Applicants = () => {
 
       if (response.data.ok === 1) {
         console.log("지원자 수락 성공:", response.data);
-        navigate("/users/mypage");
+        // MyPage의 나의 요청 탭으로 이동
+        navigate("/users/mypage?tab=requests");
       } else {
         console.error("지원자 수락 실패:", response.data);
       }

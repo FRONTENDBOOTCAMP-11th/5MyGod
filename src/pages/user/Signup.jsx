@@ -32,7 +32,9 @@ export default function Signup() {
     onError: (err) => {
       console.error("에러 내용 : ", err);
       if (err.response?.data.errors) {
-        err.response?.data.errors.forEach((error) => setError(error.path, { message: error.msg }));
+        err.response?.data.errors.forEach((error) =>
+          setError(error.path, { message: error.msg })
+        );
       } else {
         alert(err.response?.data.message || "잠시 후 다시 요청해주세요.");
       }
@@ -58,7 +60,9 @@ export default function Signup() {
                   placeholder="이메일을 입력하세요"
                   className="mt-1 block w-full p-3 border text-gray-700 border-gray-300 rounded-[10px] bg-white shadow-card-shadow"
                 />
-                {errors.email && <p className="text-red-500">{errors.email.message}</p>}
+                {errors.email && (
+                  <p className="text-red-500">{errors.email.message}</p>
+                )}
               </div>
 
               {/* 비밀번호 입력 */}
@@ -67,11 +71,15 @@ export default function Signup() {
                 <input
                   type="password"
                   id="password"
-                  {...register("password", { required: "비밀번호를 입력해주세요." })}
+                  {...register("password", {
+                    required: "비밀번호를 입력해주세요.",
+                  })}
                   placeholder="비밀번호를 입력하세요"
                   className="mt-1 block w-full p-3 border text-gray-700 border-gray-300 rounded-[10px] bg-white shadow-card-shadow"
                 />
-                {errors.password && <p className="text-red-500">{errors.password.message}</p>}
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
+                )}
               </div>
 
               {/* 비밀번호 확인 */}
@@ -82,12 +90,18 @@ export default function Signup() {
                   id="confirmPassword"
                   {...register("confirmPassword", {
                     required: "비밀번호를 확인해주세요.",
-                    validate: (value) => value === watch("password") || "비밀번호가 일치하지 않습니다.",
+                    validate: (value) =>
+                      value === watch("password") ||
+                      "비밀번호가 일치하지 않습니다.",
                   })}
                   placeholder="비밀번호를 확인하세요"
                   className="mt-1 block w-full p-3 border text-gray-700 border-gray-300 rounded-[10px] bg-white shadow-card-shadow"
                 />
-                {errors.confirmPassword && <p className="text-red-500">{errors.confirmPassword.message}</p>}
+                {errors.confirmPassword && (
+                  <p className="text-red-500">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
               </div>
 
               {/* 닉네임 */}
@@ -98,12 +112,17 @@ export default function Signup() {
                   id="name"
                   {...register("name", {
                     required: "닉네임을 입력해주세요.",
-                    maxLength: { value: 9, message: "9자 이하로 입력해주세요." },
+                    maxLength: {
+                      value: 9,
+                      message: "9자 이하로 입력해주세요.",
+                    },
                   })}
                   placeholder="닉네임을 입력하세요"
                   className="mt-1 block w-full p-3 border text-gray-700 border-gray-300 rounded-[10px] bg-white shadow-card-shadow"
                 />
-                {errors.confirmPassword && <p className="text-red-500">{errors.name.message}</p>}
+                {errors.name && (
+                  <p className="text-red-500">{errors.name.message}</p>
+                )}
               </div>
 
               {/* 핸드폰 번호 입력 */}
@@ -116,7 +135,9 @@ export default function Signup() {
                   placeholder="핸드폰 번호를 입력하세요"
                   className="mt-1 block w-full p-3 border text-gray-700 border-gray-300 rounded-[10px] bg-white shadow-card-shadow"
                 />
-                {errors.phone && <p className="text-red-500">{errors.phone.message}</p>}
+                {errors.phone && (
+                  <p className="text-red-500">{errors.phone.message}</p>
+                )}
               </div>
 
               {/* 주소 입력 */}
@@ -129,7 +150,9 @@ export default function Signup() {
                   placeholder="주소를 입력하세요"
                   className="mt-1 block w-full p-3 border text-gray-700 border-gray-300 rounded-[10px] bg-white shadow-card-shadow"
                 />
-                {errors.address && <p className="text-red-500">{errors.address.message}</p>}
+                {errors.address && (
+                  <p className="text-red-500">{errors.address.message}</p>
+                )}
               </div>
 
               {/* 성별 선택 */}
@@ -139,7 +162,9 @@ export default function Signup() {
                   <button
                     type="button"
                     className={`w-full px-4 py-2 rounded ${
-                      gender === "male" ? "bg-blue-500 text-white" : "bg-gray-200 text-gray-700"
+                      gender === "male"
+                        ? "bg-blue-500 text-white"
+                        : "bg-gray-200 text-gray-700"
                     }`}
                     onClick={() => setGender("male")}
                   >
@@ -148,19 +173,26 @@ export default function Signup() {
                   <button
                     type="button"
                     className={`w-full px-4 py-2 rounded ${
-                      gender === "female" ? "bg-pink-500 text-white" : "bg-gray-200 text-gray-700"
+                      gender === "female"
+                        ? "bg-pink-500 text-white"
+                        : "bg-gray-200 text-gray-700"
                     }`}
                     onClick={() => setGender("female")}
                   >
                     여성
                   </button>
                 </div>
-                {!gender && <p className="text-red-500 mt-2">성별을 선택해주세요.</p>}
+                {!gender && (
+                  <p className="text-red-500 mt-2">성별을 선택해주세요.</p>
+                )}
               </div>
 
               {/* 회원가입 버튼 */}
               <div>
-                <button type="submit" className="w-full h-14 bg-primary-500 text-white rounded-[10px]">
+                <button
+                  type="submit"
+                  className="w-full h-14 bg-primary-500 text-white rounded-[10px]"
+                >
                   회원가입
                 </button>
               </div>
