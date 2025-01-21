@@ -1,3 +1,4 @@
+//지원자의 프로필 클릭시 지원자의 Mypage로 이동
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
