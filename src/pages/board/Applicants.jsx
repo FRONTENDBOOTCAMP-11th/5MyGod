@@ -11,11 +11,10 @@ const Applicants = () => {
   const { _id } = useParams();
   const clientId = "final05";
 
-  // 이미지 로드 실패시 사용할 기본 이미지 경로
   const defaultImagePath = `/files/${clientId}/user-neo.webp`;
 
   const handleImageError = (e) => {
-    e.target.onerror = null; // 무한 로딩 방지
+    e.target.onerror = null;
     e.target.src = defaultImagePath;
   };
 
@@ -39,7 +38,6 @@ const Applicants = () => {
           id: item.user._id,
           name: item.user.name,
           description: item.user.extra.introduction || "소개글이 없습니다.",
-          // 사용자의 이미지 경로를 직접 사용
           profileImage: item.user.image,
           productId: item.products[0]._id,
           productState: item.products[0].extra.productState[0],
@@ -127,7 +125,7 @@ const Applicants = () => {
                   alt={`${applicant.name}의 프로필`}
                   onError={handleImageError}
                   className="w-[42px] h-[42px] rounded-full object-cover mr-[16px] cursor-pointer"
-                  onClick={() => navigate(`/user/${applicant.id}`)}
+                  onClick={() => navigate(`/users/${applicant.id}`)}
                 />
 
                 <div className="flex flex-col justify-center">
